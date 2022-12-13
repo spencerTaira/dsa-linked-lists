@@ -141,7 +141,7 @@ class LinkedList {
       this.length += 1;
 
       if (this.tail === null) this.tail = newNode;
-    
+
       return undefined;
     }
 
@@ -165,13 +165,73 @@ class LinkedList {
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
+    if (idx < 0 || idx >= this.length) throw new Error();
+    let current = this.head;
+    let count = 0;
 
+    if (this.length === 1) {
+      this.head = null;
+      this.tail = null;
+      this.length--;
+      return current.val;
+    }
+
+    if (idx === 0) {
+      this.head = current.next;
+      this.length--;
+      return current.val;
+    }
+
+    while (count !== idx - 1) {
+      current = current.next;
+      count++;
+    }
+
+    if (idx === this.length - 1) {
+      let removeVal = current.next.val;
+      this.tail = current;
+      current.next = null;
+      this.length--;
+      return removeVal;
+    }
+
+    let removeVal = current.next.val;
+    current.next = current.next.next;
+    this.length--;
+    return removeVal;
   }
 
   /** average(): return an average of all values in the list */
 
   average() {
+    let current = this.head;
 
+    if (this.length === 0) return 0;
+
+    let sum = 0;
+
+    while (current !== null) {
+      sum += current.val;
+      current = current.next;
+    }
+
+    return sum / this.length;
+  }
+
+  reverseInPlace() {
+    let current = this.head;
+    let prev = null;
+    let next;
+
+    while (current.next !== null) {
+      next = current.next;
+      current.next = prev;
+      prev = current;
+      current = next;
+    }
+
+    current.next = prev;
+    [this.head, this.tail] = [this.tail, this.head];
   }
 }
 
